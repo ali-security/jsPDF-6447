@@ -26,7 +26,16 @@ jobs:
         
       - name: Build
         run: npm run build
-        
+
+      - name: Pack
+        run: npm pack
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jspdf-2.5.1.tgz
+          path: jspdf-2.5.1.tgz
+
       - name: Run tests
         run: npm run test-ci
 
