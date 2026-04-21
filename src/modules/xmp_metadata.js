@@ -98,12 +98,15 @@ function escapeXml(str) {
  */
 jsPDF.API.addMetadata = function(metadata, rawXmlOrNamespaceUri) {
   if (typeof this.internal.__metadata__ === "undefined") {
+    var isRawXml = typeof rawXmlOrNamespaceUri === "boolean";
+    var namespaceUri =
+      typeof rawXmlOrNamespaceUri === "string"
+        ? rawXmlOrNamespaceUri
+        : "http://jspdf.default.namespaceuri/";
     this.internal.__metadata__ = {
       metadata: metadata,
-      namespaceUri:
-        rawXmlOrNamespaceUri ?? "http://jspdf.default.namespaceuri/",
-      rawXml:
-        typeof rawXmlOrNamespaceUri === "boolean" ? rawXmlOrNamespaceUri : false
+      namespaceUri: namespaceUri,
+      rawXml: isRawXml ? rawXmlOrNamespaceUri : false
     };
     this.internal.events.subscribe("putCatalog", putCatalog);
 
