@@ -52,23 +52,15 @@ jobs:
           name: jspdf-2.5.1.tgz
           path: jspdf-2.5.1.tgz
 
-      - name: Run tests
+      - name: Run tests (unit + coverage upload)
         run: npm run test-ci
 
-      - name: Run deployment tests (AMD)
-        run: xvfb-run --auto-servernum npm run test-amd
-
-      - name: Run deployment tests (ESM)
-        run: xvfb-run --auto-servernum npm run test-esm
-
-      - name: Run deployment tests (globals)
-        run: xvfb-run --auto-servernum npm run test-globals
-
-      - name: Run deployment tests (TypeScript)
-        run: xvfb-run --auto-servernum npm run test-typescript
-
-      - name: Run deployment tests (WebWorker)
-        run: xvfb-run --auto-servernum npm run test-webworker
+      # Runs the full `test-local` script documented in CONTRIBUTING.md:
+      # unit + node + AMD + ESM + globals + TypeScript + WebWorker.
+      # xvfb-run provides a virtual display for the non-headless Chrome/
+      # Firefox launchers used by the deployment karma configs.
+      - name: Run test-local (deployment module-format tests)
+        run: xvfb-run --auto-servernum npm run test-local
 
   test-node:
     runs-on: ubuntu-latest
