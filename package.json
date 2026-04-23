@@ -111,6 +111,7 @@
     "generate-docs": "jsdoc -c jsdoc.json --readme README.md"
   },
   "browserslist": [
-    "last 2 versions"
+    "last 2 versions",
+    "IE 11"
   ]
 }
