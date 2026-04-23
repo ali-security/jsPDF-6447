@@ -13,8 +13,25 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev xvfb firefox
-          
+          sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev xvfb \
+            libdbus-glib-1-2 libgtk-3-0 libasound2 libx11-xcb1 libxt6
+
+      - name: Install Firefox (non-snap)
+        run: |
+          # Ubuntu 22.04's apt `firefox` package is a transitional shim that
+          # installs the Snap build, which does not run in GitHub Actions
+          # runners and causes karma-firefox-launcher to hit its capture
+          # timeout. Install Mozilla's official Firefox tarball instead.
+          set -euo pipefail
+          FIREFOX_VERSION="${FIREFOX_VERSION:-115.0esr}"
+          curl -fsSL -o /tmp/firefox.tar.bz2 \
+            "https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2"
+          sudo rm -rf /opt/firefox
+          sudo tar -xjf /tmp/firefox.tar.bz2 -C /opt
+          sudo ln -sf /opt/firefox/firefox /usr/local/bin/firefox
+          /usr/local/bin/firefox --version
+          echo "FIREFOX_BIN=/usr/local/bin/firefox" >> "$GITHUB_ENV"
+
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:

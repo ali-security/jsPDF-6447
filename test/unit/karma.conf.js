@@ -48,7 +48,20 @@ module.exports = config => {
       }
     },
 
-    browsers: ["ChromeHeadless", "FirefoxHeadless"],
+    browsers: ["ChromeHeadless", "FirefoxHeadlessCI"],
+    customLaunchers: {
+      FirefoxHeadlessCI: {
+        base: "FirefoxHeadless",
+        prefs: {
+          "browser.tabs.remote.autostart": false,
+          "browser.tabs.remote.autostart.2": false
+        }
+      }
+    },
+    captureTimeout: 180000,
+    browserDisconnectTimeout: 30000,
+    browserDisconnectTolerance: 2,
+    browserNoActivityTimeout: 120000,
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
